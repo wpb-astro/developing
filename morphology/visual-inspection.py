@@ -161,8 +161,8 @@ def plot_two_images(field, obj_id, UV_radius=None, opt_radius=None,
   if circles:
     # plot circles of radius = half light radius
     if UV_radius:
-      f1.show_circles(r1,d1, UV_radius, color='red', zorder=1)
-      f2.show_circles(r2,d2, opt_radius, color='red', zorder=1)
+      f1.show_circles(r1,d1, UV_radius,  edgecolor='red', facecolor='none',zorder=1)
+      f2.show_circles(r2,d2, opt_radius, edgecolor='red', facecolor='none',zorder=1)
     # plot circles of radius = 1 arcsec
     f1.show_circles(r1,d1, 1/3600, edgecolor='blue', facecolor='none',zorder=1)
     f2.show_circles(r2,d2, 1/3600, edgecolor='blue', facecolor='none',zorder=1)
