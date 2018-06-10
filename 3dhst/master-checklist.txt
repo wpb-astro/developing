@@ -1,0 +1,242 @@
+ALL THE WEIRD BOIS
+# still have to check SIMBAD/cutouts for x ray source list
+
+AEGIS 4711 
+  - [OIII] bright 
+  - contam flag = 1
+  - SIMBAD: nothing
+  keep
+
+AEGIS 11942
+  - x ray
+  - no flag
+
+AEGIS 19308 
+  - x ray 
+  - contam flag = 1
+
+AEGIS 19697
+  - [OIII] bright
+  - grism: lines do not agree w direct image
+  - no flag
+  - SIMBAD: nothing
+ remove
+
+AEGIS 20017
+  - x ray 
+  - no flag
+
+AEGIS 21981
+  - x ray 
+  - no flag
+
+AEGIS 22931
+  - [OIII] bright
+  - no flag 
+  - SIMBAD: nothing
+ keep 
+
+AEGIS 26028
+  - x ray
+  - contam flag = 1
+
+AEGIS 27624 
+  - z outlier
+  - no flag
+  - wpb: grism frame looks good CHANGE MY MIND (maybe nearby object?)
+
+AEGIS 27825 
+  - [OIII] bright
+  - counterpart to AEGIS 27851
+  - SIMBAD: radio source 
+
+AEGIS 27851 
+  - [OIII] bright
+  - counterpart to AEGIS 27825
+  - SIMBAD: radio source 
+
+AEGIS 29498
+  - x ray 
+  - no flag
+
+AEGIS 31082 
+  - [OIII] bright
+  - contam flag = 1
+ Keep in sample, not for emission line stuff
+
+AEGIS 32856
+  - [OIII] bright
+  - SIMBAD: x ray source, AGN
+  - no flag
+ remove 
+
+AEGIS 33651
+  - x ray  
+  - no flag
+
+AEGIS 37103 
+  - [OIII] bright
+  - grism shows lines, but prob two objects 
+  - no flag # wpb: change contam flag to =1 (two components)
+  dont trust emission lines
+
+AEGIS 39067
+  - x ray 
+  - no flag
+
+AEGIS 39277 (THIS GUY)
+  - [OIII] bright
+  - x ray 
+  - SIMBAD: AGN
+  - cut flag = 1
+  - contam flag = 1
+ get this guy outta here 
+
+COSMOS 5283
+  - [OIII], [OII], Hbeta bright
+  - SIMBAD: nothing
+  - no flag
+ no grounds for exclusion
+
+COSMOS 5571
+  - [OIII] BRIGHT af
+  - SIMBAD: nothing
+  - bright foreground galaxy
+  - contam flag = 1 
+ prob eliminate from line flux studies, not from sample
+
+COSMOS 7813 
+  - [OIII] bright doublet + Hbeta
+  - SIMBAD = nothing
+  - no flag
+ no grounds for exclusion
+
+COSMOS 10280 
+  - [OIII] bright
+  - no flag
+  - SIMBAD: nothing
+ keep
+
+COSMOS 11337
+  - [OIII] bright
+  - x ray
+  - SIMBAD: AGN
+  - contam flag = 1
+ remove 
+
+COSMOS 11530
+  - [OIII] bright 
+  - no flag
+ Keep
+
+COSMOS 14968 
+  - [OIII] bright 
+  - cut flag = 1
+  - SIMBAD = nothing 
+ keep 
+
+COSMOS 15994 
+  - x ray
+  - contam flag = 1
+
+COSMOS 20062
+  - ALL THE LINES
+  - [OIII bright] 
+  - grism maybe two components (two knots in galaxy?)
+  - contam flag = 1
+  - SIMBAD: nothing
+ keep in sample, not for emission lines
+
+GOODSN 5359
+  - x ray source 
+  - no flag
+
+GOODSN 7547 
+  - z outlier
+  - close galaxy w matching photo_z
+  - no flag
+  - wpb: remove it, unless z outlier attributed to nearby neighbor  -- grism frame unconvincing
+
+GOODSN 7805 
+  - [OIII] bright
+  - no flag
+ keep 
+
+GOODSN 8551 
+  - z outlier 
+  - no flag
+  - wpb: remove it, unless z outlier attributed to nearby neighbor
+
+
+GOODSN 12302 
+  - z outlier
+  - x ray 
+  - SIMBAD: radio and x ray source
+  - contam flag = 1
+  - wpb: goodbye
+
+GOODSN 13286
+  - z outlier
+  - second close galaxy w different redshift 
+  - no flag
+  - wpb: grism frame looks good....
+
+GOODSN 16879 
+  - z outlier 
+  - x ray
+  - second close galaxy w different redshift 
+  - contam flag = 1
+  - wpb: grism frame seemingly shows OIII, but SED is bizarre shape...
+
+GOODSN 19464 
+  - x ray 
+  - no flag
+
+GOODSN 19591
+  - [OIII] bright 
+  - contam flag = 1
+  - nearby counterpart 
+ keep but not for emission line 
+
+GOODSN 19701 
+  - [OIII] bright 
+  - radio source 
+  - cut flag = 1 
+  - contam flag = 1
+ decide later 
+
+GOODSN 19913
+  - x ray 
+  - cut flag = 1 
+
+GOODSN 21231
+  - x ray 
+  - no flag 
+
+GOODSN 21267
+  - z outlier 
+  - no flag
+  - wpb: grism frame looks good CHANGE MY MIND
+
+GOODSN 21290 
+  - [OIII] bright 
+  - SIMBAD: QSO and radio, AGN
+  - no flag
+ remove 
+
+GOODSN 24328
+  - [OIII] bright
+  - SIMBAD: nothing 
+  - no flag # wpb: adusted, contam = 1 (interacting)
+  - redshift correct, multiple components 
+ keep but not for emission lines
+
+GOODSN 22299
+  - x ray 
+  - no flag
+
+GOODSN 25004 
+  - [OIII] bright 
+  - SIMBAD: nothing 
+  - no flag 
+ keep 
