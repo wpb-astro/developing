@@ -114,7 +114,7 @@ X AEGIS 33651
 ? AEGIS 37103 
   - [OIII] bright
   - grism shows lines, but prob two objects 
-  - no flag
+  - no flag # wpb: changed contam flag to =1 (two components)
   - SIMBAD: nothing
   - NED: nothing
   dont trust emission lines
@@ -315,7 +315,7 @@ X GOODSN 21290
 S GOODSN 24328
   - [OIII] bright
   - SIMBAD: nothing 
-  - no flag
+  - no flag # wpb: adusted, contam = 1 (interacting)
   - redshift correct, multiple components 
  keep but not for emission lines
 
