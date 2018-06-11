@@ -1,90 +1,132 @@
 ALL THE WEIRD BOIS
 # still have to check SIMBAD/cutouts for x ray source list
 
-AEGIS 4711 
+O AEGIS 4711 
   - [OIII] bright 
+  - grism: redshift is good 
   - contam flag = 1
   - SIMBAD: nothing
+  - NED: nothing
   keep
 
-AEGIS 11942
+X AEGIS 11942
   - x ray
+  - SIMBAD: X-ray 
+        http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%406157633&Name=%5bLNG2009%5d%20egs-0772&submit=submit
+  - NED: nothing
   - no flag
+Remove 
 
-AEGIS 19308 
+X AEGIS 19308 
   - x ray 
+  - SIMBAD: nothing
+  - NED: nothing
   - contam flag = 1
+ Remove, x ray match
 
-AEGIS 19697
+X AEGIS 19697
   - [OIII] bright
   - grism: lines do not agree w direct image
   - no flag
   - SIMBAD: nothing
- remove
+remove
 
-AEGIS 20017
+X AEGIS 20017
   - x ray 
+  - SIMBAD: x ray source
+      http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%406157690&Name=%5bLNG2009%5d%20egs-0830&submit=submit
+  - NED: x ray source 
   - no flag
+ Remove 
 
-AEGIS 21981
+X AEGIS 21981
   - x ray 
+  - SIMBAD: x ray source 
+       http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%406157541&Name=%5bLNG2009%5d%20egs-0679&submit=submit
+  - NED: x ray source 
   - no flag
+ Remove 
 
-AEGIS 22931
+O AEGIS 22931
   - [OIII] bright
   - no flag 
   - SIMBAD: nothing
  keep 
 
-AEGIS 26028
+X AEGIS 26028
   - x ray
+  - SIMBAD: x ray source 
+      http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%409033039&Name=XDEEP2%20aeg2-0116&submit=submit
+  - NED: x ray source
   - contam flag = 1
+ Remove, AGN 
 
-AEGIS 27624 
+X AEGIS 27624 
   - z outlier
+  - SIMBAD: 
+      http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%408031342&Name=EGSIRAC%20J141946.38%2b525525.8&submit=submit
   - no flag
-  - wpb: grism frame looks good CHANGE MY MIND (maybe nearby object?)
+  Remove 
 
-AEGIS 27825 
+? AEGIS 27825 (TWIN #1)
   - [OIII] bright
+  - grism shows lines, what about photo z?
   - counterpart to AEGIS 27851
   - SIMBAD: radio source 
+ ask
 
-AEGIS 27851 
+? AEGIS 27851 (TWIN #2) 
   - [OIII] bright
   - counterpart to AEGIS 27825
   - SIMBAD: radio source 
+ ask
 
-AEGIS 29498
-  - x ray 
+X AEGIS 29498
+  - x ray
+  - SIMBAD: x ray source  
+      http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%409032921&Name=XDEEP2%20aeg1-0087&submit=submit
+  - NED: x ray source
   - no flag
+ Remove 
 
-AEGIS 31082 
+S AEGIS 31082 
   - [OIII] bright
+  - grism shows lines but contaminated
   - contam flag = 1
  Keep in sample, not for emission line stuff
 
-AEGIS 32856
+X AEGIS 32856
   - [OIII] bright
+  - grism good 
   - SIMBAD: x ray source, AGN
   - no flag
  remove 
 
-AEGIS 33651
+X AEGIS 33651
   - x ray  
+  - SIMBAD: x ray source 
+      http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%406157531&Name=%5bLNG2009%5d%20egs-0669&submit=submit
+  - NED: x ray source
+  - AGN
   - no flag
+ Remove 
 
-AEGIS 37103 
+? AEGIS 37103 
   - [OIII] bright
   - grism shows lines, but prob two objects 
-  - no flag # wpb: change contam flag to =1 (two components)
+  - no flag
+  - SIMBAD: nothing
+  - NED: nothing
   dont trust emission lines
 
-AEGIS 39067
+X AEGIS 39067
   - x ray 
+  - SIMBAD: x ray source 
+      http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%409032907&Name=XDEEP2%20aeg1-0049&submit=submit
   - no flag
+ Remove, AGN
 
-AEGIS 39277 (THIS GUY)
+X AEGIS 39277 (THIS GUY)
   - [OIII] bright
   - x ray 
   - SIMBAD: AGN
@@ -92,151 +134,201 @@ AEGIS 39277 (THIS GUY)
   - contam flag = 1
  get this guy outta here 
 
-COSMOS 5283
-  - [OIII], [OII], Hbeta bright
+O COSMOS 5283
+  - grism: [OIII], [OII], Hbeta bright
+  - I suspect it may be AGN based on the grism 
+     --- EDIT: not grounds to say AGN !
   - SIMBAD: nothing
   - no flag
  no grounds for exclusion
 
-COSMOS 5571
+S COSMOS 5571
   - [OIII] BRIGHT af
   - SIMBAD: nothing
   - bright foreground galaxy
   - contam flag = 1 
+  - grism: selected on [O II] + phot-z (contaminated near OIII)
+                --> cannot measure OIII from the grism 
  prob eliminate from line flux studies, not from sample
 
-COSMOS 7813 
+O COSMOS 7813 
   - [OIII] bright doublet + Hbeta
+  - good phot-z
   - SIMBAD = nothing
   - no flag
  no grounds for exclusion
 
-COSMOS 10280 
+O COSMOS 10280 
+  - grism shows lines, phot-z good
   - [OIII] bright
   - no flag
   - SIMBAD: nothing
  keep
 
-COSMOS 11337
+X COSMOS 11337
   - [OIII] bright
   - x ray
   - SIMBAD: AGN
   - contam flag = 1
  remove 
 
-COSMOS 11530
+O COSMOS 11530
+  - grism looks good
   - [OIII] bright 
   - no flag
  Keep
 
-COSMOS 14968 
+O COSMOS 14968 
   - [OIII] bright 
+  - OIII + Hb good in grism, but cutoff blueward
   - cut flag = 1
   - SIMBAD = nothing 
  keep 
 
-COSMOS 15994 
+O COSMOS 15994 
   - x ray
+  - SIMBAD: nothing
+  - NED: x ray source (3 arcsec tho)
+     https://ned.ipac.caltech.edu/cgi-bin/objsearch?search_type=Near+Position+Search&in_csys=Equatorial&in_equinox=J2000.0&lon=10h00m33.32153s+&lat=%2B02d20m32.4154s&radius=.1&hconst=73&omegam=0.27&omegav=0.73&corr_z=1&z_constraint=Unconstrained&z_value1=&z_value2=&z_unit=z&ot_include=ANY&nmp_op=ANY&out_csys=Equatorial&out_equinox=J2000.0&obj_sort=Distance+to+search+center&of=pre_text&zv_breaker=30000.0&list_limit=5&img_stamp=YES
   - contam flag = 1
+ Keep, x ray counterpart confused
 
-COSMOS 20062
+S COSMOS 20062
   - ALL THE LINES
   - [OIII bright] 
-  - grism maybe two components (two knots in galaxy?)
+  - grism: maybe two components (two knots in galaxy?)
   - contam flag = 1
   - SIMBAD: nothing
  keep in sample, not for emission lines
 
-GOODSN 5359
+X GOODSN 5359
   - x ray source 
+  - SIMBAD: radio galaxy (.21 arcsec) x ray source (.51 arcsec) 
+       http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=189.130354++++62.166122&Radius=20&Radius.unit=arcsec&submit=submit+query
+  - NED: radio, x ray, etc 
+       https://ned.ipac.caltech.edu/cgi-bin/objsearch?search_type=Near+Position+Search&in_csys=Equatorial&in_equinox=J2000.0&lon=12h36m31.28496s&lat=%2B62d09m58.0392s&radius=.1&hconst=73&omegam=0.27&omegav=0.73&corr_z=1&z_constraint=Unconstrained&z_value1=&z_value2=&z_unit=z&ot_include=ANY&nmp_op=ANY&out_csys=Equatorial&out_equinox=J2000.0&obj_sort=Distance+to+search+center&of=pre_text&zv_breaker=30000.0&list_limit=5&img_stamp=YES#ObjNo1
   - no flag
+ Remove, AGN
 
-GOODSN 7547 
+X GOODSN 7547 
   - z outlier
-  - close galaxy w matching photo_z
+  - SIMBAD: http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=189.289174++++62.179551&Radius=20&Radius.unit=arcsec&submit=submit+query  
+  - close galaxy w matching photo_z (see simbad)
   - no flag
-  - wpb: remove it, unless z outlier attributed to nearby neighbor  -- grism frame unconvincing
+  Remove
 
-GOODSN 7805 
+O GOODSN 7805 
   - [OIII] bright
+  - grism good
+  - SIMBAD: nothing
   - no flag
  keep 
 
-GOODSN 8551 
+X GOODSN 8551 
   - z outlier 
+  - SIMBAD: http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%404165581&Name=MODS%20deep%201683&submit=submit
   - no flag
-  - wpb: remove it, unless z outlier attributed to nearby neighbor
+ Remove 
 
-
-GOODSN 12302 
+X GOODSN 12302 
   - z outlier
   - x ray 
-  - SIMBAD: radio and x ray source
+  - SIMBAD: radio source
+   http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%40484861&Name=%5bWCB2004%5d%20GOODS%20850-13b&submit=submit
   - contam flag = 1
-  - wpb: goodbye
+ Remove
 
-GOODSN 13286
+X GOODSN 13286
   - z outlier
+  - SIMBAD: http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=189.213845++++++62.2076&Radius=20&Radius.unit=arcsec&submit=submit+query
+  - NOTE: theres a bunch of galaxies within 1.5 arcsec, prob easily confused
   - second close galaxy w different redshift 
   - no flag
-  - wpb: grism frame looks good....
+  Remove 
 
-GOODSN 16879 
+X GOODSN 16879 
   - z outlier 
   - x ray
+  - SIMBAD: nothing for x ray 
+    http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=189.175375++++62.225403&Radius=20&Radius.unit=arcsec&submit=submit+query
+  - NED: x ray/radio source 
+    https://ned.ipac.caltech.edu/cgi-bin/objsearch?search_type=Near+Position+Search&in_csys=Equatorial&in_equinox=J2000.0&lon=12h36m42.09000s&lat=%2B62d13m31.4508s&radius=.1&hconst=73&omegam=0.27&omegav=0.73&corr_z=1&z_constraint=Unconstrained&z_value1=&z_value2=&z_unit=z&ot_include=ANY&nmp_op=ANY&out_csys=Equatorial&out_equinox=J2000.0&obj_sort=Distance+to+search+center&of=pre_text&zv_breaker=30000.0&list_limit=5&img_stamp=YES#ObjNo1
   - second close galaxy w different redshift 
   - contam flag = 1
-  - wpb: grism frame seemingly shows OIII, but SED is bizarre shape...
+  - AGN at z = 4.424 
+  - wave observed = 15086 --> AGN rest wave 2781 (magnesium II?) 
+ Remove, grism misidentified line, much different redshift
 
-GOODSN 19464 
+X GOODSN 19464 
   - x ray 
+  - SIMBAD: AGN? 
+    http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%40482692&Name=TKRS%20%203284&submit=submit
   - no flag
+ Remove 
 
-GOODSN 19591
+S GOODSN 19591
   - [OIII] bright 
+  - grism shows lines, possible nearby object
   - contam flag = 1
   - nearby counterpart 
- keep but not for emission line 
+ keep but not for emission line study 
 
-GOODSN 19701 
+? GOODSN 19701 
   - [OIII] bright 
-  - radio source 
+  - SIMBAD: radio source (AGN?)
+  http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%406097707&Name=%5bMOD2010%5d%201043&submit=submit
+  - grism contaminated
   - cut flag = 1 
   - contam flag = 1
  decide later 
 
-GOODSN 19913
+X GOODSN 19913 (looks so cool!!!)
   - x ray 
+  - SIMBAD: seyfert 2 galaxy/AGN/rad/QSO/smm??? 
+        Ohhhh thx google, cool 
+    http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%40481567&Name=NAME%20SMM%20J123635.6%2b621424&submit=submit
+  - NED: EVERYTHING wow 
+    https://ned.ipac.caltech.edu/cgi-bin/objsearch?search_type=Obj_id&objid=1427623&objname=1&img_stamp=YES&hconst=73.0&omegam=0.27&omegav=0.73&corr_z=1
   - cut flag = 1 
+ Remove 
 
 GOODSN 21231
-  - x ray 
+  - x ray
+  - SIMBAD: WOW! AGN, GSO, mm radio source
+   http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=189.194733++++62.246103&Radius=20&Radius.unit=arcsec&submit=submit+query
   - no flag 
 
-GOODSN 21267
+X GOODSN 21267
   - z outlier 
+  - SIMBAD: 
+   http://simbad.u-strasbg.fr/simbad/sim-id?Ident=%405470608&Name=%5bCHB2000%5d%20F3714.16-1449.2&submit=submit
   - no flag
-  - wpb: grism frame looks good CHANGE MY MIND
+  - trust spec z throw out 
 
-GOODSN 21290 
+X GOODSN 21290 
   - [OIII] bright 
+  - grism good
   - SIMBAD: QSO and radio, AGN
   - no flag
  remove 
 
-GOODSN 24328
+S GOODSN 24328
   - [OIII] bright
   - SIMBAD: nothing 
-  - no flag # wpb: adusted, contam = 1 (interacting)
+  - no flag
   - redshift correct, multiple components 
  keep but not for emission lines
 
-GOODSN 22299
+X GOODSN 22299
   - x ray 
+  - SIMBAD: x ray and radio source 
+   http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=189.215897++++62.251312&Radius=20&Radius.unit=arcsec&submit=submit+query
   - no flag
+ Remove 
 
-GOODSN 25004 
+O GOODSN 25004 
   - [OIII] bright 
+  - grism: good lines
   - SIMBAD: nothing 
   - no flag 
  keep 
