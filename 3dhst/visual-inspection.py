@@ -206,16 +206,28 @@ def view_field_images(reffile, option):
 temp = input('Do you want to view a list of objects?(y/n): ')
 if temp == 'y':
   option = 3
-  input_list = input('Enter list to view: ')
+  input_list = input('Enter list to view(field_id#): ')
   object_list = []
+  field_list = []
+  id_list = []
   for i in input_list.split():
-    a = int(i)
-    object_list.append(a)
+    object_list.append(i)
+  for i in object_list:
+    a,b = i.split('_')
+    field_list.append(a)
+    id_list.append(int(b))
   obj_id = reffile['obj_id']
+  field = reffile['field']
   temp_index = 0
   input_object_indices = []
-  for i in obj_id:
-    if i in object_list:
+  old_list = []
+  new_list = []
+  for i,j in zip(field, obj_id):
+    old_list.append(i+str(j))
+  for i,j in zip(field_list, id_list):
+    new_list.append(i+str(j))
+  for i in old_list:
+    if i in new_list:
       input_object_indices.append(temp_index)
     temp_index += 1
   
