@@ -8,7 +8,9 @@ from astropy.io import fits
 from astropy.table import Table
 import numpy as np
 import pickle
-
+import glob
+from scipy.interpolate import interp1d
+from scipy.integrate import quad
 
 
 def set_base_dir(base_in=None):
@@ -18,15 +20,23 @@ def set_base_dir(base_in=None):
     base_dir = '/home/will/research/3dhst/3dhst_grism_data/'
   return base_dir
 
+def set_objlist(obj_list):
+  if isinstance(obj_list,int):
+    return [obj_list]
+  else:
+    return obj_list
 
-def get_candidates(field, z='grism', pdf_width_constraint=True,base_dir=''):
+
+def get_candidates(field, z='grism', pdf_width_constraint=True,base_dir='',remove_sample=False):
   #, sorted_ids=False):
   '''return IDs of all objects with JH<26, 1.9<z<2.35
   if z==grism: use z_max_grism
         phot:  use z_peak_phot
   if width_constraint==True: require u68 - l68 < 0.05
     (only valid when using grism redshift)
-  if sorted=True, sort ID's by continuum mag (bright to faint)'''
+  if sorted=True, sort ID's by continuum mag (bright to faint)
+  if remove_sample: remove objects in sample from phot-z sample
+    (only valid when using phot redshift)'''
 
   base_dir = set_base_dir(base_dir)
 
@@ -38,7 +48,7 @@ def get_candidates(field, z='grism', pdf_width_constraint=True,base_dir=''):
   data = hdu[1].data
   hdu.close()
 
-  data = data[ data['jh_mag'] < 26 ]
+  data = data[ data['jh_mag'] <= 26 ]
 
   if z=='phot':
     z = 'z_peak_phot'
@@ -47,8 +57,9 @@ def get_candidates(field, z='grism', pdf_width_constraint=True,base_dir=''):
 
   else:
     z = 'z_max_grism'
-    z = 'z_best'
+#    z = 'z_best'
     data = data[ (data[z] < 2.35) & (data[z] > 1.9) ]
+#    data = data[ (data[z] < 2.4) & (data[z] > 1.85) ]
     if pdf_width_constraint:
       lo = 'z_grism_l68'
       hi = 'z_grism_u68'
@@ -57,6 +68,15 @@ def get_candidates(field, z='grism', pdf_width_constraint=True,base_dir=''):
       data = data[ (data[hi]-data[lo]) < 0.05 ]
 
   pid = data['phot_id']
+
+  # remove sample
+#  print((z, remove_sample))
+  if (z=='z_peak_phot') & (remove_sample):
+    len0 = len(pid)
+    sample = get_detections2(field)
+    pid = pid[ np.isin(pid, sample)==False ]
+    len1 = len(pid)
+    print('%s / %s of phot-z objects are in my sample. removing from phot-z list.' % (len0-len1, len0))
   return pid
 
 
@@ -240,6 +260,8 @@ def reform_catalog(obj_list, measure_array, error_array):
 
      return array with columns {obj id, measure1, error1, measure2, error2, ....}'''
 
+  obj_list=set_objlist(obj_list)
+
 
   nmeas = measure_array.shape[1]
   cat = np.zeros( (len(obj_list), 1 + 2*nmeas) )
@@ -295,6 +317,7 @@ def get_positions(field, obj_list, base_dir=''):
   return RA,Dec  array'''
   
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   hdu = fits.open( ('%s%s_WFC3_V4.1.5/%s_3dhst_v4.1.5_catalogs/%s_3dhst.v4.1.cat.FITS' \
                     % (base_dir, field.upper(), field.lower(), field.lower()) ) )
@@ -314,11 +337,12 @@ def get_positions(field, obj_list, base_dir=''):
   return out_array
 
 
-def get_redshifts(field, obj_list, base_dir=''):
+def get_redshifts(field, obj_list, base_dir='', phot=False):
   '''input field name, list of phot IDs
      return redshift  array'''
 
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   hdu = fits.open( ('%s%s_WFC3_V4.1.5/%s_3dhst_v4.1.5_catalogs/%s_3dhst.v4.1.5.zfit.linematched.fits'\
                     % (base_dir, field.upper(), field.lower(), field.lower()) ) )
@@ -328,7 +352,11 @@ def get_redshifts(field, obj_list, base_dir=''):
   rbool = np.isin(data['phot_id'], obj_list)
   data = data[rbool]
 
-  z = reorder_array( data['z_max_grism'], data['phot_id'], obj_list )
+  zcol = 'z_max_grism'
+  if phot:
+    zcol = 'z_peak_phot'
+
+  z = reorder_array( data[zcol], data['phot_id'], obj_list )
 
   return z
 
@@ -338,6 +366,7 @@ def get_jhmags(field, obj_list, base_dir=''):
      return redshift  array'''
 
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   hdu = fits.open( ('%s%s_WFC3_V4.1.5/%s_3dhst_v4.1.5_catalogs/%s_3dhst.v4.1.5.zfit.linematched.fits'\
                     % (base_dir, field.upper(), field.lower(), field.lower()) ) )
@@ -357,6 +386,7 @@ def get_3dhst_masses(field, obj_list, base_dir='', remove_nan=True):
      return log stellar mass array'''
 
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   cat = np.genfromtxt( ('%s%s_WFC3_V4.1.5/%s_3dhst_v4.1.5_catalogs/%s_3dhst.v4.1.5.zbest.fout'\
                     % (base_dir, field.upper(), field.lower(), field.lower()) ), \
@@ -375,9 +405,35 @@ def get_3dhst_masses(field, obj_list, base_dir='', remove_nan=True):
   else:
     return lmass
 
+def get_3dhst_sfrs(field, obj_list, base_dir='', remove_nan=True):
+  '''input field name, list of phot IDs
+     return log stellar mass array'''
+
+  base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
+
+  cat = np.genfromtxt( ('%s%s_WFC3_V4.1.5/%s_3dhst_v4.1.5_catalogs/%s_3dhst.v4.1.5.zbest.fout'\
+                    % (base_dir, field.upper(), field.lower(), field.lower()) ), \
+                    dtype=None, names=True )
+
+  rbool = np.isin(cat['id'], obj_list)
+  data = cat[rbool]
+
+  lsfr = reorder_array( data['lsfr'], data['id'], obj_list)
+
+  if remove_nan:
+    lsfr2 = lsfr[ np.isnan(lsfr)==False]
+    if len(lsfr2)<len(lsfr):
+      print("CAUTION: removing nans --> object list does not correspond to array")
+    return lsfr2
+  else:
+    return lsfr
+
 
 def get_UVJ_colors(field, obj_list, base_dir=''):
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
+
   floc = ('%s%s_WFC3_V4.1.5/%s_3dhst_v4.1.5_catalogs/%s_3dhst.v4.1.5.zbest.rf' \
                     % (base_dir, field.upper(), field.lower(), field.lower()) )
   t = Table(np.genfromtxt(floc, dtype=None, names=True))
@@ -439,6 +495,145 @@ def get_3dhst_linefit_cat(field, base_dir=''):
   return data
 
 
+def get_pz(field, obj_list, z='phot', renorm=True, base_dir=''):
+  '''
+  if single object, return single p(z)
+  if multiple, return summed p(z)
+
+  returns a list of interpolated p(z) functions
+  '''
+
+  base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
+
+  while z not in ['grism','phot']:
+    z = input("invalid redshift param. enter 'grism' or 'phot'\n")
+  if z=='phot':
+    zcol = 1
+  if z=='grism':
+    zcol = 4
+
+  pf_list = []
+
+  n0, n2 = (0,0)
+  for obj_id in obj_list:
+    fsearch = '%s%s*/*/*/*/*%s*new_zfit.pz.*' % (base_dir, field.upper(), str(obj_id).zfill(5))
+    filein = glob.glob(fsearch)
+    if len(filein)<1:
+      print('no p(z) for object    %5s' % obj_id)
+      n0 += 1
+      continue
+    if len(filein)>1:
+      print('multiple p(z) for object    %5s' % obj_id)
+      n2+=1
+    filein = filein[0]
+
+    hdu = fits.open(filein)
+
+    z1 = hdu[zcol].data
+    p1 = np.e**hdu[zcol+1].data
+
+    hdu.close()
+
+    pf = interp1d(z1, p1)
+
+    if renorm:
+      I = quad(pf, min(z1), max(z1))[0]
+#      print(I)
+      p2 = p1/I
+      pf = interp1d(z1, p2)
+#      print( quad(pf, min(z1), max(z1))[0] )
+
+    pf_list.append( pf )
+
+  print('%s / %s have no p(z)' % (n0, len(obj_list)))
+  print('%s / %s have multiple p(z)' % (n2, len(obj_list)))
+
+  return (z1, pf_list)
+
+def evaluate_pz(pf_list, z):
+  '''
+  evaluate the sum of p(z) given a list of interpolated p(z) functions
+  '''
+
+  pfall = np.zeros(len(z))
+  for pf in pf_list:
+    pf0 = pf(z)
+    pfall += pf0
+
+  return (z, pfall)
+
+def get_pz2(field, obj_list, z='phot', renorm=True, base_dir=''):
+  '''
+  if single object, return single p(z)
+  if multiple, return summed p(z)
+
+  returns a vector sum of all p(z)
+  '''
+
+  base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
+
+  while z not in ['grism','phot']:
+    z = input("invalid redshift param. enter 'grism' or 'phot'\n")
+  if z=='phot':
+    zcol = 1
+  if z=='grism':
+    zcol = 4
+
+   
+
+  n0, n2 = (0,0)
+  first = True
+  for obj_id in obj_list:
+
+    # make sure the coarse z grid for photo-z's is same each time
+    if not first:
+      zprev = z1.copy()
+
+    # find the pz file
+    fsearch = '%s%s*/*/*/*/*%s*new_zfit.pz.*' % (base_dir, field.upper(), str(obj_id).zfill(5))
+    filein = glob.glob(fsearch)
+    if len(filein)<1:
+      print('no p(z) for object    %5s' % obj_id)
+      n0 += 1
+      continue
+    if len(filein)>1:
+      print('multiple p(z) for object    %5s' % obj_id)
+      n2+=1
+    filein = filein[0]
+    hdu = fits.open(filein)
+
+    z1 = hdu[zcol].data
+    p1 = np.e**hdu[zcol+1].data
+
+    hdu.close()
+
+    # make sure the coarse z grid for photo-z's is same each time
+    if not first:
+      if np.max( z1 - zprev) > 0:
+        print('something wrong with z grid!')
+
+    if first:
+      pftot = np.zeros(len(z1))
+      first=False
+
+    pf = interp1d(z1, p1)
+
+    if renorm:
+      I = quad(pf, min(z1), max(z1))[0]
+#      print(I)
+      p2 = p1/I
+#      pf = interp1d(z1, p2)
+#      print( quad(pf, min(z1), max(z1))[0] )
+
+    pftot = pftot + p2
+
+  print('%s / %s have no p(z)' % (n0, len(obj_list)))
+  print('%s / %s have multiple p(z)' % (n2, len(obj_list)))
+
+  return (z1, pftot)
+
 
 def create_phot_catalog(field, obj_list, filter_list='', base_dir=''):
   '''return array with rows of objects, columns of filter for SED fits
@@ -452,6 +647,7 @@ def create_phot_catalog(field, obj_list, filter_list='', base_dir=''):
   filter_list: list of filters (str)'''
 
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   filter_dict = get_filter_dict(field, base_dir)
   if filter_list == '':
@@ -520,6 +716,7 @@ def create_emisline_catalog(field, obj_list, emis_line='', exclude_zero=False,
   return np array of flux line measurements, units 1e-17 erg / s / cm2 '''
 
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   if emis_line == '':
     emis_line = get_emislines()
@@ -595,11 +792,12 @@ def create_emisline_catalog(field, obj_list, emis_line='', exclude_zero=False,
 
 #-----------------------------------------------------
 
-def snr_cut(field, obj_list, min_snr=10, base_dir='', badlist=False):
+def snr_cut(field, obj_list, min_snr=10, base_dir='', badlist=False,return_snr=False):
   '''return object list including only objects with SNR>min_snr
   unless badlist=True --> then, return objects with SNR<min_snr'''
 
   base_dir = set_base_dir(base_dir)
+  obj_list=set_objlist(obj_list)
 
   field_loc = {'AEGIS':215., 'COSMOS': 150., 'GOODSN': 189., 'GOODSS': 53.}
 
@@ -614,6 +812,9 @@ def snr_cut(field, obj_list, min_snr=10, base_dir='', badlist=False):
   indices_without_f140w = phot[0][:,0] <0
   snr[indices_without_f140w,0] = snr[indices_without_f140w,1]
   snr = snr[:,0]
+
+  if return_snr:
+    return snr
 
   good_list = pid[ snr >= min_snr ]
   bad_list = pid[snr < min_snr]
