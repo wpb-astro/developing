@@ -153,8 +153,9 @@ def view_field_images(reffile, option):
       pl.show()
       index += 1
   if option == 2:
-    for i in iden:
-      if i == start_image:
+    for i,j in zip(temp_field, iden):
+      image = i+'_'+str(j)
+      if image == start_image:
         start_index = temp_index
         break
       temp_index += 1
