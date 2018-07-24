@@ -337,7 +337,7 @@ def get_positions(field, obj_list, base_dir=''):
   return out_array
 
 
-def get_redshifts(field, obj_list, base_dir='', phot=False):
+def get_redshifts(field, obj_list, base_dir='', phot=False, spec=False):
   '''input field name, list of phot IDs
      return redshift  array'''
 
@@ -355,6 +355,8 @@ def get_redshifts(field, obj_list, base_dir='', phot=False):
   zcol = 'z_max_grism'
   if phot:
     zcol = 'z_peak_phot'
+  if spec:
+    zcol = 'z_spec'
 
   z = reorder_array( data[zcol], data['phot_id'], obj_list )
 
@@ -380,6 +382,35 @@ def get_jhmags(field, obj_list, base_dir=''):
 
   return jh
 
+def get_specz_obj(field, obj_list, base_dir='', specz=True):
+  '''input field name, list of phot IDs,
+     return table of obj w/ spec z'''
+
+  phot_z = np.array(get_redshifts(field, obj_list, base_dir='', phot=True, spec=False))
+  spec_z = np.array(get_redshifts(field, obj_list, base_dir='', phot=False, spec=True))
+  jhmag = np.array(get_jhmags(field, obj_list, base_dir=''))
+
+
+  m_phot_z = []
+  m_spec_z = []
+  m_jhmag = []
+  m_pid = []
+  
+  if specz: 
+    match_ind = np.where( 0.0 < spec_z )[0]
+ 
+  for i in match_ind:
+    m_pid.append(obj_list[i])
+    m_phot_z.append(phot_z[i])
+    m_spec_z.append(spec_z[i])
+    m_jhmag.append(jhmag[i])
+
+  field_list = []
+  for i in range(len(m_phot_z)):
+    field_list.append(field)
+
+  t = Table( np.column_stack( (field_list, m_pid, m_phot_z, m_spec_z, m_jhmag) ), names=['field', 'obj_id', 'phot_z', 'spec_z', 'jhmag'])
+  return t
 
 def get_3dhst_masses(field, obj_list, base_dir='', remove_nan=True):
   '''input field name, list of phot IDs
