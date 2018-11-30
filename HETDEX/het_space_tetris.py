@@ -1,11 +1,18 @@
 '''
 planning HETDEX pointings
-adopted from code by Donghui Jeong
+adapted from code by Donghui Jeong
 
 Author: Will Bowman
 bowman@psu.edu
 
 30Nov2018
+---------------------------------
+
+Usage:
+. get coordinates of corners of all (active) IFUs (units = degrees)
+  given an array of active IFUs, pointing location, and E/W track
+. only need to use the function "IFUSphereCoords" (last function in this file)
+
 '''
 
 
@@ -17,9 +24,44 @@ from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 
 
+# define IFU configuration
+# wrt nominal IFU configuration, RHS = Tracker+Y, top = enclosure side B
+fullIFUs = np.full((10,10),True)
+IFU78 = fullIFUs.copy()
+
+IFU78[0, 0:3] = False
+IFU78[1,0] = False
+IFU78[9,0:3] = False
+IFU78[8,0] = False
+IFU78[9,7:] = False
+IFU78[8,9] = False
+IFU78[0,7:] = False
+IFU78[1,9] = False
+IFU78[4:6, 3:6] = False
+
+# 19-2 trimester
+IFU58now = IFU78.copy()
+IFU58now[4:8,0] = False
+IFU58now[4:9,1] = False
+IFU58now[4,2] = False
+IFU58now[5,7] = False
+IFU58now[8,7] = False
+IFU58now[5:9,8] = False
+IFU58now[4:8,9] = False
+
+# 19-1 trimester
+IFU50now = IFU58now.copy()
+IFU50now[2:4, 8:] = False # 30, 31, 40, 41
+IFU50now[2:4, 0] = False # 39, 49
+IFU50now[3, 1] = False # 48
+IFU50now[4, 8] = False
+
+
+
 def angle2degrees(angle):
   '''
-  convert angles from float or radians to degrees
+  if angle is a float (unitless), assume already in degrees
+  if angle is in radians, convert to degrees
   '''
   try:
     angle = angle.to('deg')
@@ -43,12 +85,6 @@ def Tan(value):
   return np.tan( np.deg2rad( value ))
 
 
-#def ArcCos(value):
-#  '''return value in degrees'''
-#  d
-
-
-# a few lines at the beginning?
 
 # basic HET numbers
 HETlatitude = 30.681436 * u.degree
@@ -105,7 +141,7 @@ def Fgeodesic(ad, theta, phi):
   '''
   ad = (RA, Dec)
   inputs are in degrees, or radians, or float (if float, assume degrees)
-  return RA, Dec (?)
+  return RA, Dec 
   '''
   a0 = ad[0]
   d0 = ad[1]
@@ -126,37 +162,6 @@ sIFU = 50. * u.arcsec
 dIFU = 100. * u.arcsec
 
 
-# define IFU configuration
-# wrt nominal IFU configuration, RHS = Tracker+Y, top = enclosure side A
-fullIFUs = np.full((10,10),True)
-IFU78 = fullIFUs.copy()
-
-IFU78[0, 0:3] = False
-IFU78[1,0] = False
-IFU78[9,0:3] = False
-IFU78[8,0] = False
-IFU78[9,7:] = False
-IFU78[8,9] = False
-IFU78[0,7:] = False
-IFU78[1,9] = False
-IFU78[4:6, 3:6] = False
-
-# 19-2 trimester
-IFU58now = IFU78.copy()
-IFU58now[4:8,0] = False
-IFU58now[4:9,1] = False
-IFU58now[4,2] = False
-IFU58now[5,7] = False
-IFU58now[8,7] = False
-IFU58now[5:9,8] = False
-IFU58now[4:8,9] = False
-
-# 19-1 trimester
-IFU50now = IFU58now.copy()
-IFU50now[2:4, 8:] = False # 30, 31, 40, 41
-IFU50now[2:4, 0] = False # 39, 49
-IFU50now[3, 1] = False # 48
-IFU50now[4, 8] = False
 
 
 ### Plotting IFUs on sphere
@@ -167,15 +172,17 @@ def IFUSpherePts(shotcentAD, ifucent, msize, pangle):
   phi = np.arctan2( tanL, tanM )
   theta = np.arctan( tanM / Cos(phi) )
   adcent = Fgeodesic( shotcentAD, theta, phi + pangle)
-  # add Polygon, Table...
   poly_table = [ Fgeodesic( adcent, msize/2.*np.sqrt(2.), pangle + (i*np.pi/2. +np.pi/4.)*u.rad) for i in range(1,5)]
   poly_table_degrees = [ [a.to('deg').value, d.to('deg').value] for a,d in poly_table ]
   coord_array = [c for d in poly_table_degrees for c in d]
-#  return Polygon(poly_table_degrees, True) # need to add something like True as second argument?
   return coord_array
 
-def IFUSphereCoords(whichIFU, shotcentAD, track='E'):
 
+def IFUSphereCoords(whichIFU, shotcentAD, track='E'):
+  '''
+  whichIFU is a boolean array of which IFUs are active
+  shotcentAD is a tuple (RA,DEC) of pointing center (units = degrees)
+  '''
   pangle = FPangle( shotcentAD[1], track) 
 
   IFU_coord_list = []
@@ -191,7 +198,4 @@ def IFUSphereCoords(whichIFU, shotcentAD, track='E'):
    
 
 
-
-#-------
-#QQ: E/W track?
 
